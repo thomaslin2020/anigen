@@ -375,7 +375,6 @@ class StyleGAN(pl.LightningModule):  # TODO: Add val loop, spectral norm
 
         self.alpha = 0
         self.current_layer = 0
-        self.show_generated_images = True
         self.dm = None
         
         self.current_resolution = config.INITIAL_RESOLUTION
@@ -392,7 +391,7 @@ class StyleGAN(pl.LightningModule):  # TODO: Add val loop, spectral norm
         self.alpha_step = 0
 
         path = Path(f'{config.IMAGE_DIR}/{config.NETWORK_NAME}')
-        path.mkdir(parents=True)
+        path.mkdir(parents=True, exist_ok=True)
     
     def set_datamodule(self, dm):
         self.dm = dm
@@ -437,8 +436,9 @@ class StyleGAN(pl.LightningModule):  # TODO: Add val loop, spectral norm
             fake = self(z)
             crit_fake_pred = self.critic(fake, self.alpha, self.current_layer)
             gen_loss = self.get_gen_loss(crit_fake_pred)
-            if self.show_generated_images:
-                show_tensor_images(fake.detach(), config.NUM_ROWS_IN_GRID,
+            if config.STEPS_PER_IMAGE > 0:
+                if batch_idx % config.STEPS_PER_IMAGE == 0:
+                    show_tensor_images(fake.detach(), config.NUM_ROWS_IN_GRID,
                            image_name=get_image_name(f'{self.current_epoch}-{batch_idx}'))
             self.log('gen_loss', gen_loss)
             return gen_loss
