@@ -10,5 +10,3 @@ Libraries used:
 - PyTorch: Visit https://pytorch.org/get-started/locally/
 - Scipy: `pip install scipy`
 - Torchvision: Included in PyTorch installation instructions on the PyTorch website
-
-More updates, including comments and a more organized code structure, will be added later. So stay tuned!
