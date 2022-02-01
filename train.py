@@ -6,7 +6,6 @@ from data import AnimeFaceDataModule
 import pytorch_lightning as pl
 from utils import generate_images
 import config
-import gc
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 plt.rcParams["figure.figsize"] = (config.FIG_SIZE, config.FIG_SIZE)
@@ -39,4 +38,3 @@ trainer.fit(model, dm)
 
 
 generate_images(model.to(device), 25, 5, device)
-gc.collect() # Added to prevent memory leaks
